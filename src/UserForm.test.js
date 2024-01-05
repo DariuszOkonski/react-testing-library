@@ -65,3 +65,54 @@ test('it calls onUserAdd when the form is submitted (best implementation)', () =
     email: 'jane@jane.com',
   });
 });
+
+test('it calls onUserAdd when the form is submited (get element by label text)', () => {
+  const mock = jest.fn();
+  render(<UserForm onUserAdd={mock} />);
+
+  // label and textbox has to be connected by htmlFor and id
+  const nameInput = screen.getByRole('textbox', { name: /enter name/i });
+  const emailInput = screen.getByRole('textbox', { name: /enter email/i });
+  const button = screen.getByRole('button', { name: /add user/i });
+
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  act(() => {
+    user.click(nameInput);
+    user.keyboard('jane');
+
+    user.click(emailInput);
+    user.keyboard('jane@jane.com');
+
+    user.click(button);
+  });
+
+  expect(mock).toHaveBeenCalled();
+  expect(mock).toHaveBeenCalledTimes(1);
+  expect(mock).toHaveBeenCalledWith({
+    name: 'jane',
+    email: 'jane@jane.com',
+  });
+});
+
+test('empties the two inputs when form is submitted', () => {
+  const mock = jest.fn();
+  render(<UserForm onUserAdd={mock} />);
+
+  const nameInput = screen.getByRole('textbox', { name: /enter name/i });
+  const emailInput = screen.getByRole('textbox', { name: /enter email/i });
+  const button = screen.getByRole('button', { name: /add user/i });
+
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  act(() => {
+    user.click(nameInput);
+    user.keyboard('jane');
+
+    user.click(emailInput);
+    user.keyboard('jane@jane.com');
+
+    user.click(button);
+  });
+
+  expect(nameInput).toHaveValue('');
+  expect(emailInput).toHaveValue('');
+});
