@@ -39,3 +39,29 @@ test('it calls onUserAdd when the form is submitted (not the best implementation
   expect(argList).toHaveLength(1);
   expect(argList[0][0]).toEqual({ name: 'jane', email: 'jane@jane.com' });
 });
+
+test('it calls onUserAdd when the form is submitted (best implementation)', () => {
+  const mock = jest.fn();
+  render(<UserForm onUserAdd={mock} />);
+
+  const [nameInput, emailInput] = screen.getAllByRole('textbox');
+  const button = screen.getByRole('button');
+
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  act(() => {
+    user.click(nameInput);
+    user.keyboard('jane');
+
+    user.click(emailInput);
+    user.keyboard('jane@jane.com');
+
+    user.click(button);
+  });
+
+  expect(mock).toHaveBeenCalled();
+  expect(mock).toHaveBeenCalledTimes(1);
+  expect(mock).toHaveBeenCalledWith({
+    name: 'jane',
+    email: 'jane@jane.com',
+  });
+});
