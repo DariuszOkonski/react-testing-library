@@ -22,6 +22,7 @@ test('it calls onUserAdd when the form is submitted (not the best implementation
   };
   render(<UserForm onUserAdd={callback} />);
 
+  // screen.logTestingPlaygroundURL();
   const [nameInput, emailInput] = screen.getAllByRole('textbox');
   const button = screen.getByRole('button');
 
@@ -101,6 +102,28 @@ test('empties the two inputs when form is submitted', () => {
   const nameInput = screen.getByRole('textbox', { name: /enter name/i });
   const emailInput = screen.getByRole('textbox', { name: /enter email/i });
   const button = screen.getByRole('button', { name: /add user/i });
+
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  act(() => {
+    user.click(nameInput);
+    user.keyboard('jane');
+
+    user.click(emailInput);
+    user.keyboard('jane@jane.com');
+
+    user.click(button);
+  });
+
+  expect(nameInput).toHaveValue('');
+  expect(emailInput).toHaveValue('');
+});
+
+test('empties the two inputs when form is submitted v1', () => {
+  render(<UserForm onUserAdd={() => {}} />);
+
+  const nameInput = screen.getByRole('textbox', { name: /name/i });
+  const emailInput = screen.getByRole('textbox', { name: /email/i });
+  const button = screen.getByRole('button');
 
   // eslint-disable-next-line testing-library/no-unnecessary-act
   act(() => {
