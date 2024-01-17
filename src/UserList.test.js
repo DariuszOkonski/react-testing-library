@@ -1,12 +1,27 @@
 import { render, screen, within } from '@testing-library/react';
 import UserList from './UserList';
 
-test('render one row per user ver 1', () => {
+function renderComponent() {
   const users = [
     { name: 'jane', email: 'jane@jane.com' },
     { name: 'mark', email: 'mark@mark.com' },
   ];
   render(<UserList users={users} />);
+
+  return {
+    users,
+  };
+}
+
+test('render one row per user ver 1', () => {
+  // const users = [
+  //   { name: 'jane', email: 'jane@jane.com' },
+  //   { name: 'mark', email: 'mark@mark.com' },
+  // ];
+  // render(<UserList users={users} />);
+
+  // to replace beforeEach
+  renderComponent();
 
   const janeRow = screen.getByRole('row', { name: /jane jane@jane\.com/i });
   const markRow = screen.getByRole('row', { name: /mark mark@mark\.com/i });
