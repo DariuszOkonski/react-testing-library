@@ -17,3 +17,12 @@ test('getBy, queryBy, findBy finding 0 elements', async () => {
 
   expect(errorThrown).toEqual(true);
 });
+
+test('getBy, queryBy, findby whe they find 1 element', async () => {
+  render(<ColorList />);
+
+  expect(screen.getByRole('list')).toBeInTheDocument();
+  // eslint-disable-next-line testing-library/prefer-presence-queries
+  expect(screen.queryByRole('list')).toBeInTheDocument();
+  expect(await screen.findByRole('list')).toBeInTheDocument();
+});
